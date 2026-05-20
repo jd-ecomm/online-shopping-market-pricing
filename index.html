@@ -1935,8 +1935,13 @@ function renderPerfChart(r, series) {
     return months[date.getMonth()] + ' ' + date.getDate();
   };
   
-  // Build full 130-day x-axis labels
-  const N_DAYS = 130;
+  // Day index 0 = Jan 1 of current year. Derive N_DAYS from the actual data
+  // so charts always extend through the latest day with sales data.
+  const N_DAYS = Math.max(
+    (series.di && series.di.length > 0 ? Math.max(...series.di) + 1 : 0),
+    (series.ldi && series.ldi.length > 0 ? Math.max(...series.ldi) + 1 : 0),
+    1
+  );
   const labels = [];
   for (let d = 0; d < N_DAYS; d++) labels.push(dayToLabel(d));
   
